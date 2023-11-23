@@ -23,13 +23,11 @@ export class Task {
     return Object.freeze(this.#data);
   }
 
-  set completedDate(date) {
-    const newData = { ...this.#data };
+  toggleCompleteStatus() {
+    const newData = { ...this.#data, updated_at: new Date() };
 
-    if (date instanceof Date || date === null) {
-      newData.completed_at = date;
-      newData.updated_at = new Date();
-    }
+    const isCompleted = !!this.#data.completed_at;
+    newData.completed_at = isCompleted ? null : new Date();
 
     this.#data = newData;
   }

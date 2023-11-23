@@ -82,4 +82,28 @@ export const routes = [
       return res.writeHead(204).end();
     },
   },
+  {
+    method: "PATCH",
+    path: "/tasks/:id/complete",
+    get pathRegex() {
+      return buildRoutePathRegex(this.path);
+    },
+    handler: (req, res) => {
+      const { id } = req.params;
+
+      try {
+        const data = database.findData("tasks", id);
+        if (!data) throw new Error("Resource Not Found!");
+
+        const task = new Task(data);
+        task.toggleCompleteStatus();
+
+        database.update("tasks", task.data);
+      } catch (error) {
+        return res.writeHead(404).end();
+      }
+
+      return res.writeHead(204).end();
+    },
+  },
 ];
