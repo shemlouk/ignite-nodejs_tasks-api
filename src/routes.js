@@ -58,7 +58,7 @@ export const routes = [
 
         database.update("tasks", task.data);
       } catch (error) {
-        return res.writeHead(404).end();
+        return res.writeHead(404).end("Task was not Found!");
       }
 
       return res.writeHead(204).end();
@@ -76,7 +76,7 @@ export const routes = [
       try {
         database.delete("tasks", id);
       } catch (error) {
-        return res.writeHead(404).end();
+        return res.writeHead(404).end("Task was not Found!");
       }
 
       return res.writeHead(204).end();
@@ -100,7 +100,7 @@ export const routes = [
 
         database.update("tasks", task.data);
       } catch (error) {
-        return res.writeHead(404).end();
+        return res.writeHead(404).end("Task was not Found!");
       }
 
       return res.writeHead(204).end();

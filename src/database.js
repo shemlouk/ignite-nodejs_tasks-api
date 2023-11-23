@@ -1,5 +1,15 @@
+import fs from "fs/promises";
+
+const PATH_TO_DB = new URL("../data.json", import.meta.url);
+
 export class Database {
   #database = {};
+
+  constructor() {
+    fs.readFile(PATH_TO_DB, "utf-8")
+      .then((data) => (this.#database = JSON.parse(data)))
+      .catch(() => this.#persist());
+  }
 
   #getTable(tableName) {
     return this.#database[tableName];
@@ -11,6 +21,10 @@ export class Database {
     return { row: table[index], index };
   }
 
+  #persist() {
+    fs.writeFile(PATH_TO_DB, JSON.stringify(this.#database, null, 2));
+  }
+
   findData(tableName, id) {
     const { row } = this.#getRow(tableName, id);
     return row;
@@ -19,6 +33,7 @@ export class Database {
   insert(tableName, data) {
     const table = this.#getTable(tableName);
     table ? table.push(data) : (this.#database[tableName] = [data]);
+    this.#persist();
   }
 
   select(tableName, search) {
@@ -39,6 +54,7 @@ export class Database {
     if (index > -1) {
       const table = this.#getTable(tableName);
       table[index] = data;
+      this.#persist();
     } else {
       throw new Error("Resource Not Found!");
     }
@@ -50,6 +66,7 @@ export class Database {
     if (index > -1) {
       const table = this.#getTable(tableName);
       table.splice(index, 1);
+      this.#persist();
     } else {
       throw new Error("Resource Not Found!");
     }
