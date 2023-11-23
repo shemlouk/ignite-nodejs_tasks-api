@@ -16,8 +16,16 @@ export class Database {
     table ? table.push(data) : (this.#database[tableName] = [data]);
   }
 
-  select(tableName) {
-    return this.#getTable(tableName) ?? [];
+  select(tableName, search) {
+    const table = this.#getTable(tableName) ?? [];
+    const { title = "", description = "" } = search ?? {};
+
+    const filteredTable = table.filter(
+      (row) =>
+        row.title.includes(title) && row.description.includes(description)
+    );
+
+    return filteredTable;
   }
 
   update(tableName, id, data) {
