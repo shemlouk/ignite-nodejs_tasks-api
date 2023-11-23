@@ -6,9 +6,14 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "node --watch src/server.js"
+    "dev": "node --watch src/server.js",
+    "upload-csv": "node scripts/upload-csv-data.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "csv-generate": "^4.3.0",
+    "csv-parse": "^5.5.2"
+  }
 }
