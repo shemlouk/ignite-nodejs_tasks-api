@@ -27,6 +27,7 @@ export const routes = [
     },
     handler: (req, res) => {
       const { title, description } = req.body;
+      if (!title || !description) return res.writeHead(400).end();
 
       const task = new Task({ title, description });
       database.insert("tasks", task.data);
