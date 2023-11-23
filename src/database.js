@@ -11,6 +11,11 @@ export class Database {
     return { row: table[index], index };
   }
 
+  findData(tableName, id) {
+    const { row } = this.#getRow(tableName, id);
+    return row;
+  }
+
   insert(tableName, data) {
     const table = this.#getTable(tableName);
     table ? table.push(data) : (this.#database[tableName] = [data]);
@@ -28,11 +33,12 @@ export class Database {
     return filteredTable;
   }
 
-  update(tableName, id, data) {
-    const { row } = this.#getRow(tableName, id);
+  update(tableName, data) {
+    let { index } = this.#getRow(tableName, data.id);
 
-    if (row) {
-      row = { ...row, ...data };
+    if (index > -1) {
+      const table = this.#getTable(tableName);
+      table[index] = data;
     } else {
       throw new Error("Resource Not Found!");
     }

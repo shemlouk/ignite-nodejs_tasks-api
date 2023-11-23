@@ -35,4 +35,33 @@ export const routes = [
       return res.writeHead(201).end();
     },
   },
+  {
+    method: "PUT",
+    path: "/tasks/:id",
+    get pathRegex() {
+      return buildRoutePathRegex(this.path);
+    },
+    handler: (req, res) => {
+      const {
+        params: { id },
+        body: { title, description },
+      } = req;
+
+      if (!title && !description) return res.writeHead(400).end();
+
+      try {
+        const data = database.findData("tasks", id);
+        if (!data) throw new Error("Resource Not Found!");
+
+        const task = new Task(data);
+        task.update({ title, description });
+
+        database.update("tasks", task.data);
+      } catch (error) {
+        return res.writeHead(404).end();
+      }
+
+      return res.writeHead(204).end();
+    },
+  },
 ];
